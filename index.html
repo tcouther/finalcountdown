@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+	<title>Counter</title>
+	<style>
+		body {
+			font-family: arial;
+			font-size: 18px;
+		}
+		.bytecount {
+			color: #777;
+			padding: 10px;
+			border: 1px solid #CCC;
+			margin: 10px 0;
+		}
+		.bug {
+			border: 1px solid #CCC;
+			padding: 10px;
+		}
+		.bug h3 {
+			margin: 0;
+		}
+		.bug p {
+			margin: 0;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Counter</h1>
+		<p>Light-weight, animated counter changes a number from old value to the new value with formatting, and easing options.</p>
+
+		<div class="bytecount" data-countdown-init="true" data-current-number="0" data-new-number="9000000000"></div>
+
+		<div class="bug">
+			<h3>Bugs</h3>
+			<p>Fixed Everything. Just trying to make it more performant and add features while keeping it light.</p>
+		</div>
+	</header>
+
+<script>
+	/*
+	Counter with formatting options
+	By Terrill Couther
+	*/
+
+	var CountDown = function(options) {
+		//Important! set element
+		this.el = options.element || null;
+		let elCurrentValue = this.el.getAttribute('data-current-number');
+		let elNewValue = this.el.getAttribute('data-new-number');
+
+		this.curNum = parseInt(elCurrentValue) || options.curNum || 0;
+		this.newNum = parseInt(elNewValue) || options.newNum || 0;
+		this.displayTarget = '';
+		this.easrat = options.easrat || null;
+		this.easpnt = options.easpnt || 10;
+		this.format = options.format || null;
+		this.frames = options.frames || 30;
+		this.idelay = options.delay || null;
+		this.cntNum = this.curNum;
+		this.decimals = 2;
+		this.callback = options.callbk || function(){};
+		this.easeStartFrame = 10;
+	};
+
+	CountDown.prototype.init = function() {
+		if ( this.el && this.el.getAttribute('data-countdown-init') ) {
+			let countIt = function(){
+				this.countTo({'newNum' : this.newNum});
+			}.bind(this);
+			let idelay = this.idelay;
+			if ( idelay ) {
+				window.setTimeout(countIt,idelay);
+			} else {
+				countIt();
+			}
+		}
+	};
+	CountDown.prototype.getEaseStartFrame = function(frames, percentage){
+		//backward - the easing startframe is counted from the endfrom
+		return frames - (frames*percentage/100);
+	};
+	CountDown.prototype.numDiff = function(num1, num2){
+		return (num1 > num2) ? num1-num2 : num2-num1;
+	};
+	CountDown.prototype.displayNumber = function(num) {
+		let value = num || this.cntNum;
+		let frmat = this.format || null;
+		let decimals = this.decimals;
+		let displayed = (frmat) ? this.formatNum[frmat](value,decimals) : value;
+		if (this.el) this.el.innerHTML = displayed;
+		return displayed;
+	};
+	CountDown.prototype.countAnimate = function() {
+		if ( this.stop == null ) {
+			let diff = 0;
+			let display = '';
+
+			//increase or decrease the count by delta
+			this.cntNum = (this.delta*this.dirNum) + this.cntNum;
+
+			//ease out
+			diff = this.numDiff(this.cntNum,this.newNum);
+			this.delta = ( this.easrat && diff < this.delta*this.easeStartFrame ) ? this.delta / this.easrat : this.delta;
+
+			//display Number
+			display = this.displayNumber();
+
+			//stop if display matches
+			this.stop = ( display == this.displayTarget ) ? true : null;
+
+			window.requestAnimationFrame(this.countAnimateBound);
+		} else {
+			//reset dom attributes/values
+			this.cntNum = this.newNum;
+			this.curNum = this.newNum;
+			if ( this.el ) {
+				this.el.setAttribute('data-current-number',this.newNum);
+				this.el.setAttribute('data-new-number',this.newNum);
+			}
+
+			//run callback
+			this.callback();
+		}
+	};
+	CountDown.prototype.countTo = function(options) {
+		this.newNum = options.newNum || this.newNum || 0;
+		this.dirNum = (this.cntNum < this.newNum) ? 1 : -1;
+		this.delta = this.numDiff(this.cntNum,this.newNum) / this.frames;
+		this.stop = null;
+		this.stopped = null;
+		this.displayTarget = this.formatNum[this.format](this.newNum,this.decimals);
+		this.countAnimateBound = this.countAnimate.bind(this);
+		this.easeStartFrame = this.getEaseStartFrame(this.frames,this.easpnt);
+		this.countAnimate();
+	};
+	CountDown.prototype.formatNum = {
+		'decimals' : function(a,b) {
+			return parseFloat(a.toFixed(b))
+		},
+		'bytes1024' : function(a,b) {if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		},
+		'bytes1000' : function(a,b) {if(0==a)return"0 Bytes";var c=1000,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		}
+	};
+
+	//USAGE
+	var count1 = new CountDown({
+		'element': document.querySelector("[data-countdown-init]"),
+		'format' : 'bytes1024',
+		'curNum' : 65,
+		'newNum' : 65000,
+		'frames' : 80, //animation framecount
+		'easrat' : 3, //rate of slowdown to divide speed
+		'easpnt' : 90, //start slowdown at n% from the start frame
+		'idelay' : null, //initial animation delay
+		'callbk' : function(){
+			alert('Callback is triggered and you like fish-sticks');
+		}
+	});
+	count1.init();
+
+	//SINGLE VALUE COUNT
+	//count1.countTo({'newNum' : 9869876987765});
+</script>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
