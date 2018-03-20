@@ -10,21 +10,23 @@
 		}
 		.bytecount {
 			color: #777;
-			padding: 10px 15px;
-			border: 1px solid #CCC;
+			padding: 10px 0px;
 			margin: 10px 0;
 			display: inline-block;
 			position: relative;
-			min-width: 200px;
 		}
 		.bytecount span {
-			position: relative;
-			left: 0;
+			display: inline-block;
+			overflow: hidden;
 		}
 		.bytecount span+span {
-			padding-left: 10%;
-			position: relative;
-			right: 0;
+			padding-left: 5px;
+			transition: opacity 1s ease-in-out;
+   			-moz-transition: opacity 1s ease-in-out;
+   			-webkit-transition: opacity 1s ease-in-out;
+		}
+		.bytecount[data-countdown-animate^='true'] span+span {
+			opacity: 0;
 		}
 		.bug {
 			border: 1px solid #CCC;
@@ -43,7 +45,7 @@
 		<h1>FinalCounterDown</h1>
 		<p>Light-weight, animated counter changes a number from old value to the new value with formatting, and easing options.</p>
 
-		<div class="bytecount" data-countdown-init="true" data-current-number="0" data-new-number="9000000000"></div>
+		<div class="bytecount" data-countdown-init="true" data-current-number="0" data-new-number="9000000000"><span>0.00</span><span>B</span></div>
 
 		<div class="bug">
 			<h3>Bugs</h3>
@@ -68,7 +70,7 @@
 		this.easpnt = options.easpnt || 10;
 		this.format = options.format || null;
 		this.frames = options.frames || 30;
-		this.idelay = options.delay || null;
+		this.idelay = options.idelay || null;
 		this.cntNum = this.curNum;
 		this.decimals = options.decimal || 2;
 		this.callback = options.callbk || function(){};
@@ -101,8 +103,14 @@
 		this.events.eventCountdownStart = new Event('eventCountdownStart');
 		this.events.eventCountdownStop = new Event('eventCountdownStop');
 		this.events.eventCountdownChange = new Event('eventCountdownChange');
-	};
 
+		this.el.addEventListener('eventCountdownStart', function(evt) {
+			this.el.setAttribute('data-countdown-animate',true);
+		}.bind(this), false);
+		this.el.addEventListener('eventCountdownStop', function(evt) {
+			this.el.setAttribute('data-countdown-animate',false);
+		}.bind(this), false);
+	};
 	CountDown.prototype.getEaseStartFrame = function(frames, percentage){
 		//backward - the easing startframe is counted from the endfrom
 		return frames - (frames*percentage/100);
@@ -115,8 +123,12 @@
 		let frmat = this.format || null;
 		let decimals = this.decimals;
 		let displayed = (frmat) ? this.formatNum[frmat](value,decimals) : value;
-		if (this.el) this.el.innerHTML = displayed;
-		this.el.dispatchEvent(this.events.eventCountdownChange);
+		if (this.el) {
+			this.el.innerHTML = displayed;
+			//trigger a change
+			this.el.dispatchEvent(this.events.eventCountdownChange);
+		}
+
 		return displayed;
 	};
 	CountDown.prototype.countAnimate = function() {
@@ -142,6 +154,7 @@
 			//reset dom attributes/values
 			this.cntNum = this.newNum;
 			this.curNum = this.newNum;
+
 			if ( this.el ) {
 				this.el.setAttribute('data-current-number',this.newNum);
 				this.el.setAttribute('data-new-number',this.newNum);
@@ -151,7 +164,6 @@
 		}
 	};
 	CountDown.prototype.countTo = function(options) {
-		this.el.dispatchEvent(this.events.eventCountdownStart);
 		this.newNum = options.newNum || this.newNum || 0;
 		this.dirNum = (this.cntNum < this.newNum) ? 1 : -1;
 		this.delta = this.numDiff(this.cntNum,this.newNum) / this.frames;
@@ -160,6 +172,8 @@
 		this.displayTarget = this.formatNum[this.format](this.newNum,this.decimals);
 		this.countAnimateBound = this.countAnimate.bind(this);
 		this.easeStartFrame = this.getEaseStartFrame(this.frames,this.easpnt);
+
+		this.el.dispatchEvent(this.events.eventCountdownStart);
 		this.countAnimate();
 	};
 	CountDown.prototype.formatNum = {
@@ -187,22 +201,32 @@
 		'frames' : 80, //animation framecount
 		'easrat' : 3, //rate of slowdown to divide speed
 		'easpnt' : 90, //start slowdown at n% from the start frame
-		'idelay' : null, //initial animation delay
+		'idelay' : 2000, //initial animation delay
 		'decimal': 2 //decimal count
 	});
 	count1.init();
 
+	//set random listeners
+	count1.el.addEventListener('eventCountdownStop', function(evt) {
+		console.log('stopped');
+	}, false);
 	//'eventCountdownInit'
 	//'eventCountdownStart'
 	//'eventCountdownStop'
 	//'eventCountdownChange'
-	count1.el.addEventListener('eventCountdownStop', function(evt) {
-		alert('stopped');
-	}, false);
 
 	//SINGLE VALUE COUNT
 	//count1.countTo({'newNum' : 9869876987765});
 </script>
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
