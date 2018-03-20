@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-	<title>Counter</title>
+	<title>FinalCounterDown</title>
 	<style>
 		body {
 			font-family: arial;
@@ -10,9 +10,21 @@
 		}
 		.bytecount {
 			color: #777;
-			padding: 10px;
+			padding: 10px 15px;
 			border: 1px solid #CCC;
 			margin: 10px 0;
+			display: inline-block;
+			position: relative;
+			min-width: 200px;
+		}
+		.bytecount span {
+			position: relative;
+			left: 0;
+		}
+		.bytecount span+span {
+			padding-left: 10%;
+			position: relative;
+			right: 0;
 		}
 		.bug {
 			border: 1px solid #CCC;
@@ -28,7 +40,7 @@
 </head>
 <body>
 	<header>
-		<h1>Counter</h1>
+		<h1>FinalCounterDown</h1>
 		<p>Light-weight, animated counter changes a number from old value to the new value with formatting, and easing options.</p>
 
 		<div class="bytecount" data-countdown-init="true" data-current-number="0" data-new-number="9000000000"></div>
@@ -46,30 +58,35 @@
 	*/
 
 	var CountDown = function(options) {
-		//Important! set element
 		this.el = options.element || null;
 		let elCurrentValue = this.el.getAttribute('data-current-number');
 		let elNewValue = this.el.getAttribute('data-new-number');
 
 		this.curNum = parseInt(elCurrentValue) || options.curNum || 0;
 		this.newNum = parseInt(elNewValue) || options.newNum || 0;
-		this.displayTarget = '';
 		this.easrat = options.easrat || null;
 		this.easpnt = options.easpnt || 10;
 		this.format = options.format || null;
 		this.frames = options.frames || 30;
 		this.idelay = options.delay || null;
 		this.cntNum = this.curNum;
-		this.decimals = 2;
+		this.decimals = options.decimal || 2;
 		this.callback = options.callbk || function(){};
 		this.easeStartFrame = 10;
+		this.events = {};
+		this.displayTarget = '';
+
+		this.setEvents();
 	};
 
 	CountDown.prototype.init = function() {
+		this.el.dispatchEvent(this.events.eventCountdownInit);
+
 		if ( this.el && this.el.getAttribute('data-countdown-init') ) {
 			let countIt = function(){
 				this.countTo({'newNum' : this.newNum});
 			}.bind(this);
+
 			let idelay = this.idelay;
 			if ( idelay ) {
 				window.setTimeout(countIt,idelay);
@@ -78,6 +95,14 @@
 			}
 		}
 	};
+	CountDown.prototype.setEvents = function(){
+		//set custom events
+		this.events.eventCountdownInit = new Event('eventCountdownInit');
+		this.events.eventCountdownStart = new Event('eventCountdownStart');
+		this.events.eventCountdownStop = new Event('eventCountdownStop');
+		this.events.eventCountdownChange = new Event('eventCountdownChange');
+	};
+
 	CountDown.prototype.getEaseStartFrame = function(frames, percentage){
 		//backward - the easing startframe is counted from the endfrom
 		return frames - (frames*percentage/100);
@@ -91,6 +116,7 @@
 		let decimals = this.decimals;
 		let displayed = (frmat) ? this.formatNum[frmat](value,decimals) : value;
 		if (this.el) this.el.innerHTML = displayed;
+		this.el.dispatchEvent(this.events.eventCountdownChange);
 		return displayed;
 	};
 	CountDown.prototype.countAnimate = function() {
@@ -121,11 +147,11 @@
 				this.el.setAttribute('data-new-number',this.newNum);
 			}
 
-			//run callback
-			this.callback();
+			this.el.dispatchEvent(this.events.eventCountdownStop);
 		}
 	};
 	CountDown.prototype.countTo = function(options) {
+		this.el.dispatchEvent(this.events.eventCountdownStart);
 		this.newNum = options.newNum || this.newNum || 0;
 		this.dirNum = (this.cntNum < this.newNum) ? 1 : -1;
 		this.delta = this.numDiff(this.cntNum,this.newNum) / this.frames;
@@ -140,7 +166,13 @@
 		'decimals' : function(a,b) {
 			return parseFloat(a.toFixed(b))
 		},
-		'bytes1024' : function(a,b) {if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		'bytes1024Txt' : function(a,b) {if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		},
+		'bytes1024Html' : function(a,b) {
+			if(0==a)return"0 Bytes";
+			var c=1024, d=b||2,f=Math.floor(Math.log(a)/Math.log(c)),
+			e=[["B","Bytes"],["KB","Kilobytes"],["MB","Megabytes"],["GB","Gigabytes"],["TB","Terabytes"],["PB","Petabytes"],["EB","Exabytes"],["ZB","Zettabytes"],["YB","Yottabytes"]];
+			return "<span>"+parseFloat((a/Math.pow(c,f)).toFixed(d))+"</span><span aria-label=\""+e[f][1]+"\">"+e[f][0]+"</span>";
 		},
 		'bytes1000' : function(a,b) {if(0==a)return"0 Bytes";var c=1000,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
 		}
@@ -149,31 +181,28 @@
 	//USAGE
 	var count1 = new CountDown({
 		'element': document.querySelector("[data-countdown-init]"),
-		'format' : 'bytes1024',
+		'format' : 'bytes1024Html',
 		'curNum' : 65,
 		'newNum' : 65000,
 		'frames' : 80, //animation framecount
 		'easrat' : 3, //rate of slowdown to divide speed
 		'easpnt' : 90, //start slowdown at n% from the start frame
 		'idelay' : null, //initial animation delay
-		'callbk' : function(){
-			alert('Callback is triggered and you like fish-sticks');
-		}
+		'decimal': 2 //decimal count
 	});
 	count1.init();
+
+	//'eventCountdownInit'
+	//'eventCountdownStart'
+	//'eventCountdownStop'
+	//'eventCountdownChange'
+	count1.el.addEventListener('eventCountdownStop', function(evt) {
+		alert('stopped');
+	}, false);
 
 	//SINGLE VALUE COUNT
 	//count1.countTo({'newNum' : 9869876987765});
 </script>
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
