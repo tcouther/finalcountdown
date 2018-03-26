@@ -45,7 +45,9 @@
 		<h1>FinalCounterDown</h1>
 		<p>Light-weight, animated counter changes a number from old value to the new value with formatting, and easing options.</p>
 
-		<div class="bytecount" data-countdown-init="true" data-current-number="0" data-new-number="9000000000"><span>0.00</span><span>B</span></div>
+		<div class="bytecount" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
+			<span>0.00</span><span>B</span>
+		</div>
 
 		<div class="bug">
 			<h3>Bugs</h3>
@@ -55,8 +57,8 @@
 
 <script>
 	/*
-	Counter with formatting options
-	By Terrill Couther
+		Counter with formatting options
+		By Terrill Couther
 	*/
 
 	var CountDown = function(options) {
@@ -64,17 +66,14 @@
 		let elCurrentValue = this.el.getAttribute('data-current-number');
 		let elNewValue = this.el.getAttribute('data-new-number');
 
-		this.curNum = parseInt(elCurrentValue) || options.curNum || 0;
-		this.newNum = parseInt(elNewValue) || options.newNum || 0;
-		this.easrat = options.easrat || null;
-		this.easpnt = options.easpnt || 10;
+		this.curNum = options.curNum || parseInt(elCurrentValue) || 0;
+		this.newNum = options.newNum || parseInt(elNewValue) || 0;
+		this.easing = options.easing || null;
 		this.format = options.format || null;
-		this.frames = options.frames || 30;
+		this.runtime = options.runtime || 3;
 		this.idelay = options.idelay || null;
 		this.cntNum = this.curNum;
 		this.decimals = options.decimal || 2;
-		this.callback = options.callbk || function(){};
-		this.easeStartFrame = 10;
 		this.events = {};
 		this.displayTarget = '';
 
@@ -86,7 +85,7 @@
 
 		if ( this.el && this.el.getAttribute('data-countdown-init') ) {
 			let countIt = function(){
-				this.countTo({'newNum' : this.newNum});
+				this.countStart({'newNum' : this.newNum});
 			}.bind(this);
 
 			let idelay = this.idelay;
@@ -111,10 +110,6 @@
 			this.el.setAttribute('data-countdown-animate',false);
 		}.bind(this), false);
 	};
-	CountDown.prototype.getEaseStartFrame = function(frames, percentage){
-		//backward - the easing startframe is counted from the endfrom
-		return frames - (frames*percentage/100);
-	};
 	CountDown.prototype.numDiff = function(num1, num2){
 		return (num1 > num2) ? num1-num2 : num2-num1;
 	};
@@ -125,55 +120,85 @@
 		let displayed = (frmat) ? this.formatNum[frmat](value,decimals) : value;
 		if (this.el) {
 			this.el.innerHTML = displayed;
-			//trigger a change
+			//trigger change
 			this.el.dispatchEvent(this.events.eventCountdownChange);
 		}
-
 		return displayed;
+	};
+	CountDown.prototype.easeOutX = function(t, b, c, d) {
+		return c * (-Math.pow(2, -10 * t / d) + 1) * 1024 / 1023 + b;
 	};
 	CountDown.prototype.countAnimate = function() {
 		if ( this.stop == null ) {
-			let diff = 0;
+			this.timestamp = Date.now();
+			let diffCurNew = this.numDiff(this.curNum,this.newNum);
 			let display = '';
+			let timeElampsed = this.timestamp - this.startTime;
 
-			//increase or decrease the count by delta
-			this.cntNum = (this.delta*this.dirNum) + this.cntNum;
+			if ( this.easing ) {
+				if (this.dirNum == -1) {
 
-			//ease out
-			diff = this.numDiff(this.cntNum,this.newNum);
-			this.delta = ( this.easrat && diff < this.delta*this.easeStartFrame ) ? this.delta / this.easrat : this.delta;
+					console.log(this.easeOutX(timeElampsed, 0, diffCurNew, this.duration))
+					this.cntNum = this.curNum - this.easeOutX(timeElampsed, 0, diffCurNew, this.duration);
+
+				} else {
+					console.log(this.easeOutX(timeElampsed, this.curNum, diffCurNew, this.duration));
+					this.cntNum = this.easeOutX(timeElampsed, this.curNum, diffCurNew, this.duration);
+				}
+			} else {
+				if (this.dirNum == -1) {
+					this.cntNum = this.curNum - (this.curNum * (timeElampsed / this.duration));
+				} else {
+					this.cntNum = this.curNum + (this.curNum * (timeElampsed / this.duration));
+				}
+			}
+
+			//Limit
+			if (this.dirNum == -1) {
+				this.cntNum = (this.cntNum <= this.newNum) ? this.newNum : this.cntNum;
+			} else {
+				this.cntNum = (this.cntNum >= this.newNum) ? this.newNum : this.cntNum;
+			}
 
 			//display Number
 			display = this.displayNumber();
 
-			//stop if display matches
-			this.stop = ( display == this.displayTarget ) ? true : null;
-
-			window.requestAnimationFrame(this.countAnimateBound);
-		} else {
-			//reset dom attributes/values
-			this.cntNum = this.newNum;
-			this.curNum = this.newNum;
-
-			if ( this.el ) {
-				this.el.setAttribute('data-current-number',this.newNum);
-				this.el.setAttribute('data-new-number',this.newNum);
+			// whether to stop
+			if (timeElampsed >= this.duration) {
+				this.stop = true;
 			}
 
-			this.el.dispatchEvent(this.events.eventCountdownStop);
+			//one more time =)
+			window.requestAnimationFrame(this.countAnimateBound);
+		} else {
+			this.countStop();
 		}
 	};
-	CountDown.prototype.countTo = function(options) {
+	CountDown.prototype.countStop = function(display) {
+		this.stop = true;
+		this.cntNum = this.newNum;
+		this.curNum = this.newNum;
+
+		if ( this.el ) {
+			this.el.setAttribute('data-current-number',this.newNum);
+			this.el.setAttribute('data-new-number',this.newNum);
+			if ( display ) this.displayNumber();
+		}
+
+		//trigger stop
+		this.el.dispatchEvent(this.events.eventCountdownStop);
+	};
+	CountDown.prototype.countStart = function(options) {
 		this.newNum = options.newNum || this.newNum || 0;
-		this.dirNum = (this.cntNum < this.newNum) ? 1 : -1;
-		this.delta = this.numDiff(this.cntNum,this.newNum) / this.frames;
+		this.dirNum = (this.curNum < this.newNum) ? 1 : -1;
 		this.stop = null;
 		this.stopped = null;
 		this.displayTarget = this.formatNum[this.format](this.newNum,this.decimals);
 		this.countAnimateBound = this.countAnimate.bind(this);
-		this.easeStartFrame = this.getEaseStartFrame(this.frames,this.easpnt);
-
+		this.duration = Number(this.runtime) * 1000 || 2000;
+		this.startTime = this.timestamp = Date.now();
 		this.el.dispatchEvent(this.events.eventCountdownStart);
+		//start animation
 		this.countAnimate();
 	};
 	CountDown.prototype.formatNum = {
@@ -196,11 +221,8 @@
 	var count1 = new CountDown({
 		'element': document.querySelector("[data-countdown-init]"),
 		'format' : 'bytes1024Html',
-		'curNum' : 65,
-		'newNum' : 65000,
-		'frames' : 80, //animation framecount
-		'easrat' : 3, //rate of slowdown to divide speed
-		'easpnt' : 90, //start slowdown at n% from the start frame
+		'runtime' : 2, //animation framecount
+		'easing': true, //rate of slowdown to divide speed
 		'idelay' : 2000, //initial animation delay
 		'decimal': 2 //decimal count
 	});
@@ -216,17 +238,8 @@
 	//'eventCountdownChange'
 
 	//SINGLE VALUE COUNT
-	//count1.countTo({'newNum' : 9869876987765});
+	//count1.countStart({'newNum' : 9869876987765});
 </script>
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
