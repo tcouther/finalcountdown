@@ -8,6 +8,7 @@
 		body {
 			font-family: arial;
 			font-size: 17px;
+			color: #555;
 		}
 		header, main {
 			padding: 0 20px;
@@ -18,7 +19,7 @@
 		}
 
 		h1, h2 {
-			color: #59ac47;
+			color: #000;
 		}
 
 
@@ -29,17 +30,12 @@
 		}
 		.section+.section {
 			padding-top: 60px;
-			border-top: 1px solid #BBB;
+			border-top: 1px solid #555;
 		}
 
 
 		.examples .example {
-			border-top: 1px solid #DDD;
-			padding-bottom: 40px;
-		}
-		.examples .example + .example {
-
-			padding-bottom: 40px;
+			padding: 30px 0px;
 		}
 		.countdown-display {
 			margin-top: 40px;
@@ -112,6 +108,7 @@
 			border: 2px solid #FF6A00;
 			border-radius: 50%;
 			position: relative;
+			background-color: #FFF;
 		}
 		.guage-ruler {
 			width: 80%;
@@ -155,13 +152,16 @@
 		    .examples {
 				display: flex;
 			}
-			.examples .example {
+			.examples > .example {
 				flex: 1;
 				padding-right: 40px;
 				border-top: none;
 			}
-			.examples .example + .example {
-				border-left: 1px solid #CCC;
+			.examples .example:nth-child(odd) {
+				background-color: transparent;
+			}
+			.examples > .example + .example {
+				border-left: 1px solid #EEE;
 				padding-left: 40px;
 				margin: 0;
 			}
@@ -227,7 +227,11 @@
 
 		<div class="section bug">
 			<h2>Todos / Bugs</h2>
-			<p>Separate css, js, html files</p>
+			<ul>
+				<li>Separate css, js, html files</li>
+				<li>Write proper documentation</li>
+				<li>Browser-accessible Code Samples</li>
+			</ul>
 		</div>
 	</main>
 
