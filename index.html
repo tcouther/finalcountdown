@@ -17,42 +17,44 @@
 			font-weight: 500;
 		}
 
+		h1, h2 {
+			color: #59ac47;
+		}
 
-		.bugs {
-		}
-		.bugs h3 {
-			margin: 0;
-		}
-		.bugs p {
-			margin: 0;
-		}
+
+
 
 		.section {
-			padding: 20px 0 40px;
+			padding: 20px 0 50px;
 		}
 		.section+.section {
-			border-top: 1px solid #CCC;
+			padding-top: 60px;
+			border-top: 1px solid #BBB;
 		}
 
-		.examples {
 
-		}
 		.examples .example {
-
+			border-top: 1px solid #DDD;
+			padding-bottom: 40px;
 		}
 		.examples .example + .example {
-			border-top: 1px solid #CCC;
-			margin-top: 60px;
+
+			padding-bottom: 40px;
 		}
+		.countdown-display {
+			margin-top: 40px;
+		}
+
 
 
 		.bytecount {
-			color: #777;
+			color: #FF6A00;
 			display: inline-block;
 			position: relative;
 			line-height: 1em;
 			font-size: 25px;
-			border-bottom: 1px solid #CCC;
+			border-bottom: 1px solid #EEE;
+			padding: 5px;
 		}
 		.bytecount span {
 			display: inline-block;
@@ -76,7 +78,6 @@
 			position: relative;
 			border: 2px solid #FF6A00;
 			background-color: #FFFFFF;
-			margin: 10px 0;
 			border-radius: 3px;
 		}
 		.progress-bar-ruler {
@@ -141,8 +142,8 @@
 		.guage-needle {
 		    width: 0;
 		    height: 0;
-		    border-top: .15em solid transparent;
-		    border-bottom: .15em solid transparent;
+		    border-top: .2em solid transparent;
+		    border-bottom: .2em solid transparent;
 		    border-right: 10em solid #FF6A00;
 		    -moz-border-radius: 50%;
 		    -webkit-border-radius: 50%;
@@ -150,19 +151,18 @@
 		}
 
 
-		@media only screen and (min-width: 858px) {
+		@media only screen and (min-width: 870px) {
 		    .examples {
 				display: flex;
 			}
 			.examples .example {
 				flex: 1;
 				padding-right: 40px;
+				border-top: none;
 			}
 			.examples .example + .example {
 				border-left: 1px solid #CCC;
 				padding-left: 40px;
-
-				border-top: none;
 				margin: 0;
 			}
 		}
@@ -190,28 +190,34 @@
 				<div class="example">
 					<h3>Display Numerical</h3>
 					<p>Numerical example that may use formatting of any type</p>
-					<div class="bytecount" data-countdown-digital="true"><span>0</span></div>
+					<div class="countdown-display">
+						<div class="bytecount" data-countdown-digital="true"><span>0</span></div>
+					</div>
 				</div>
 
 				<div class="example">
 					<h3>Display Bar Graph</h3>
 					<p>bar graph example working with percentage formatting</p>
-					<div class="progress-bar">
-						<div class="progress-bar-ruler"></div>
-						<div class="progress-bar-fill" data-countdown-bar="true"></div>
+					<div class="countdown-display">
+						<div class="progress-bar">
+							<div class="progress-bar-ruler"></div>
+							<div class="progress-bar-fill" data-countdown-bar="true"></div>
+						</div>
 					</div>
 				</div>
 
 				<div class="example">
 					<h3>Display Guage Graph</h3>
 					<p>A guage graph example working with percentage formatting</p>
-					<div class="guage">
-						<div class="guage-dial">
-							<div class="guage-ruler"></div>
-							<div class="guage-pointer" data-countdown-guage="true">
-								<div class="guage-needle"></div>
+					<div class="countdown-display">
+						<div class="guage">
+							<div class="guage-dial">
+								<div class="guage-ruler"></div>
+								<div class="guage-pointer" data-countdown-guage="true">
+									<div class="guage-needle"></div>
+								</div>
+								<div class="guage-pin"></div>
 							</div>
-							<div class="guage-pin"></div>
 						</div>
 					</div>
 				</div>
@@ -443,7 +449,7 @@
 		'runtime' : 1, //animation framecount
 		'easing': true, //rate of slowdown to divide speed
 		'idelay' : 1000, //initial animation delay
-		'decimal': 6 //decimal count
+		'decimal': 4 //decimal count
 	});
 	count1.init();
 
