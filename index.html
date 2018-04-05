@@ -105,7 +105,7 @@
 		}
 		.guage-dial {
 			height: 200%;
-			border: 2px solid #FF6A00;
+			border: .1em solid #FF6A00;
 			border-radius: 50%;
 			position: relative;
 			background-color: #FFF;
@@ -113,7 +113,7 @@
 		.guage-ruler {
 			width: 80%;
 			height: 80%;
-			border: 1px dashed #FFCC00;
+			border: .05em dashed #FFCC00;
 			border-radius: 50%;
 			position: absolute;
 			top: 10%;
@@ -121,22 +121,22 @@
 		}
 		.guage-pointer {
 			position: absolute;
-		    bottom: 55%;
+		    bottom: 54%;
 		    left: 0;
-		    height: 2%;
+		    height: 5%;
 		    width: 100%;
-		    overflow: hidden;
 		}
 		.guage-pin {
-		    width: 10px;
-		    height: 10px;
+		    width: 4%;
+		    height: 80%;
 		    position: absolute;
-		    bottom: 54%;
-		    left: 48.5%;
+		    bottom: 18.5%;
+		    left: 48.3%;
 		    border-radius: 50%;
 		    background-color: #FF6A00;
+
 		}
-		.guage-needle {
+		.guage-needle-old {
 		    width: 0;
 		    height: 0;
 		    border-top: .2em solid transparent;
@@ -145,6 +145,13 @@
 		    -moz-border-radius: 50%;
 		    -webkit-border-radius: 50%;
 		    border-radius: 50%;
+		}
+		.guage-needle {
+		    width: 56%;
+		    height: 50%;
+		    margin: 1% 0;
+		    background-color: #FF6A00;
+		    border-radius: 5px 5px;
 		}
 
 
@@ -157,13 +164,15 @@
 				padding-right: 40px;
 				border-top: none;
 			}
-			.examples .example:nth-child(odd) {
-				background-color: transparent;
-			}
 			.examples > .example + .example {
 				border-left: 1px solid #EEE;
 				padding-left: 40px;
 				margin: 0;
+			}
+
+			.guage {
+				width: 200px;
+				height: 100px;
 			}
 		}
 	</style>
@@ -215,8 +224,8 @@
 								<div class="guage-ruler"></div>
 								<div class="guage-pointer" data-countdown-guage="true">
 									<div class="guage-needle"></div>
+									<div class="guage-pin"></div>
 								</div>
-								<div class="guage-pin"></div>
 							</div>
 						</div>
 					</div>
@@ -494,15 +503,6 @@
 	//count1.countTo({'newNum' : 550, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 	//count1.countTo({'newNum' : 3000.5, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 </script>
-
-
-
-
-
-
-
-
-
 
 </body>
 </html>
