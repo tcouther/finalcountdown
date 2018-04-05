@@ -39,6 +39,22 @@
 			background-color: #EEE;
 		}
 
+		.formy {
+			margin: 20px 0;
+			padding: 10px 15px;
+			border: 1px dashed #CCC;
+		}
+		.formy > div {
+			padding: 20px;
+		}
+		.formy > div+div {
+			border-top: 1px solid #EEE;
+		}
+
+		.formy > div > div {
+			white-space: nowrap;
+			display: inline-block;
+		}
 		.examples .example {
 			padding: 30px 0px;
 		}
@@ -199,6 +215,7 @@
 			</div>
 			<div class="content">
 
+
 				<div class="examples" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
 
 					<div class="example">
@@ -206,17 +223,6 @@
 						<p>Numerical example that may use formatting of any type</p>
 						<div class="countdown-display">
 							<div class="bytecount" data-countdown-digital="true"><span>0</span></div>
-						</div>
-					</div>
-
-					<div class="example">
-						<h3>Display Bar Graph</h3>
-						<p>bar graph example working with percentage formatting</p>
-						<div class="countdown-display">
-							<div class="progress-bar">
-								<div class="progress-bar-ruler"></div>
-								<div class="progress-bar-fill" data-countdown-bar="true"></div>
-							</div>
 						</div>
 					</div>
 
@@ -236,7 +242,31 @@
 						</div>
 					</div>
 
+					<div class="example">
+						<h3>Display Bar Graph</h3>
+						<p>bar graph example working with percentage formatting</p>
+						<div class="countdown-display">
+							<div class="progress-bar">
+								<div class="progress-bar-ruler"></div>
+								<div class="progress-bar-fill" data-countdown-bar="true"></div>
+							</div>
+						</div>
+					</div>
+
 				</div>
+
+				<form class="formy" id="formy">
+					<div>
+						<input type="number" size="5" value="30000" id="maxval" /> Max
+					</div>
+					<div>
+						<input type="number" size="5" value="10000" id="newval" /> New
+					</div>
+					<div>
+						<button>Update Counter Values</button>
+					</div>
+				</form>
+
 			</div>
 		</div>
 
@@ -466,9 +496,9 @@
 			'guage' : document.querySelector("[data-countdown-guage]") //optinal
 		},
 		'format' : 'percentage_html',
-		'newNum' : 3000,
+		'newNum' : 10000,
 		'min' : 0,
-		'max' : 10000,
+		'max' : 30000,
 		'runtime' : 1, //animation framecount
 		'easing': true, //rate of slowdown to divide speed
 		'idelay' : 1000, //initial animation delay
@@ -514,7 +544,24 @@
 	//count1.countTo({'newNum' : 3000.5, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 </script>
 
+<script>
+	function changeVal(event) {
+		event.preventDefault();
 
+		let newnum = parseInt(document.getElementById('newval').value);
+		let maxnum = parseInt(document.getElementById('maxval').value);
+
+		count1.countTo({
+			'newNum' : newnum,
+			'min' : 0,
+			'max' : maxnum,
+			'format':'percentage_html'
+		});
+	}
+	document.getElementById('formy').onsubmit = function(event) {
+		changeVal(event);
+	}
+</script>
 
 
 
