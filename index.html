@@ -9,9 +9,7 @@
 			font-family: arial;
 			font-size: 17px;
 			color: #555;
-		}
-		header, main {
-			padding: 0 20px;
+			margin: 0;
 		}
 
 		h1, h2, h3 {
@@ -28,11 +26,18 @@
 		.section {
 			padding: 20px 0 50px;
 		}
+		.section .content {
+			padding: 0 40px;
+		}
 		.section+.section {
 			padding-top: 60px;
-			border-top: 1px solid #555;
+			border-top: 1px solid #DDD;
 		}
 
+
+		.section.description {
+			background-color: #EEE;
+		}
 
 		.examples .example {
 			padding: 30px 0px;
@@ -121,41 +126,33 @@
 		}
 		.guage-pointer {
 			position: absolute;
-		    bottom: 54%;
+		    bottom: 48%;
 		    left: 0;
 		    height: 5%;
 		    width: 100%;
 		}
 		.guage-pin {
-		    width: 4%;
-		    height: 80%;
+		    width: 5%;
+		    height: 5%;
 		    position: absolute;
-		    bottom: 18.5%;
-		    left: 48.3%;
+		    bottom: 48%;
+		    left: 48%;
 		    border-radius: 50%;
 		    background-color: #FF6A00;
-
-		}
-		.guage-needle-old {
-		    width: 0;
-		    height: 0;
-		    border-top: .2em solid transparent;
-		    border-bottom: .2em solid transparent;
-		    border-right: 10em solid #FF6A00;
-		    -moz-border-radius: 50%;
-		    -webkit-border-radius: 50%;
-		    border-radius: 50%;
 		}
 		.guage-needle {
 		    width: 56%;
 		    height: 50%;
 		    margin: 1% 0;
 		    background-color: #FF6A00;
-		    border-radius: 5px 5px;
+		    border-radius: 50%;
 		}
 
 
 		@media only screen and (min-width: 870px) {
+			.section .content {
+				padding: 0 40px;
+			}
 		    .examples {
 				display: flex;
 			}
@@ -182,65 +179,78 @@
 	<main>
 
 		<div class="section description">
-			<h1>FinalCounterDowner</h1>
-			<p>It's the FinalCounterDowner, a Light-weight, animated counter featuring:</p>
-			<ul>
-				<li>animated numerical counter</li>
-				<li>extendable formatting options</li>
-				<li>extendable graphical display options</li>
-				<li>easing option</li>
-			</ul>
+			<div class="content">
+				<h1>FinalCounterDowner</h1>
+			</div>
+			<div class="content">
+				<p>It's the FinalCounterDowner, a Light-weight, animated counter featuring:</p>
+				<ul>
+					<li>animated numerical counter</li>
+					<li>extendable formatting options</li>
+					<li>extendable graphical display options</li>
+					<li>easing option</li>
+				</ul>
+			</div>
 		</div>
 
 		<div class="section ui">
-			<h2>Examples</h2>
-			<div class="examples" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
+			<div class="content">
+				<h2>Examples</h2>
+			</div>
+			<div class="content">
 
-				<div class="example">
-					<h3>Display Numerical</h3>
-					<p>Numerical example that may use formatting of any type</p>
-					<div class="countdown-display">
-						<div class="bytecount" data-countdown-digital="true"><span>0</span></div>
-					</div>
-				</div>
+				<div class="examples" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
 
-				<div class="example">
-					<h3>Display Bar Graph</h3>
-					<p>bar graph example working with percentage formatting</p>
-					<div class="countdown-display">
-						<div class="progress-bar">
-							<div class="progress-bar-ruler"></div>
-							<div class="progress-bar-fill" data-countdown-bar="true"></div>
+					<div class="example">
+						<h3>Display Numerical</h3>
+						<p>Numerical example that may use formatting of any type</p>
+						<div class="countdown-display">
+							<div class="bytecount" data-countdown-digital="true"><span>0</span></div>
 						</div>
 					</div>
-				</div>
 
-				<div class="example">
-					<h3>Display Guage Graph</h3>
-					<p>A guage graph example working with percentage formatting</p>
-					<div class="countdown-display">
-						<div class="guage">
-							<div class="guage-dial">
-								<div class="guage-ruler"></div>
-								<div class="guage-pointer" data-countdown-guage="true">
-									<div class="guage-needle"></div>
+					<div class="example">
+						<h3>Display Bar Graph</h3>
+						<p>bar graph example working with percentage formatting</p>
+						<div class="countdown-display">
+							<div class="progress-bar">
+								<div class="progress-bar-ruler"></div>
+								<div class="progress-bar-fill" data-countdown-bar="true"></div>
+							</div>
+						</div>
+					</div>
+
+					<div class="example">
+						<h3>Display Guage Graph</h3>
+						<p>A guage graph example working with percentage formatting</p>
+						<div class="countdown-display">
+							<div class="guage">
+								<div class="guage-dial">
+									<div class="guage-ruler"></div>
+									<div class="guage-pointer" data-countdown-guage="true">
+										<div class="guage-needle"></div>
+									</div>
 									<div class="guage-pin"></div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
+				</div>
 			</div>
 		</div>
 
 		<div class="section bug">
-			<h2>Todos / Bugs</h2>
-			<ul>
-				<li>Separate css, js, html files</li>
-				<li>Write proper documentation</li>
-				<li>Browser-accessible Code Samples</li>
-			</ul>
+			<div class="content">
+				<h2>Todos / Bugs</h2>
+			</div>
+			<div class="content">
+				<ul>
+					<li>Separate css, js, html files</li>
+					<li>Write proper documentation</li>
+					<li>Browser-accessible Code Samples</li>
+				</ul>
+			</div>
 		</div>
 	</main>
 
@@ -503,6 +513,15 @@
 	//count1.countTo({'newNum' : 550, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 	//count1.countTo({'newNum' : 3000.5, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 </script>
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
