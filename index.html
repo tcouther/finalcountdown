@@ -1,19 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US" dir="ltr">
 <head>
-<meta charset="utf-8">
-	<title>FinalCounterDown</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+	<meta charset="utf-8">
+	<title>FinalCounterDowner</title>
 	<style>
 		body {
 			font-family: arial;
-			font-size: 18px;
+			font-size: 17px;
 		}
+		header, main {
+			padding: 0 20px;
+		}
+
+		h1, h2, h3 {
+			font-weight: 500;
+		}
+
+
+		.bugs {
+		}
+		.bugs h3 {
+			margin: 0;
+		}
+		.bugs p {
+			margin: 0;
+		}
+
+		.section {
+			padding: 20px 0 40px;
+		}
+		.section+.section {
+			border-top: 1px solid #CCC;
+		}
+
+		.examples {
+
+		}
+		.examples .example {
+
+		}
+		.examples .example + .example {
+			border-top: 1px solid #CCC;
+			margin-top: 60px;
+		}
+
+
 		.bytecount {
 			color: #777;
-			padding: 10px 0px;
-			margin: 10px 0;
 			display: inline-block;
 			position: relative;
+			line-height: 1em;
+			font-size: 25px;
+			border-bottom: 1px solid #CCC;
 		}
 		.bytecount span {
 			display: inline-block;
@@ -21,48 +60,181 @@
 		}
 		.bytecount span+span {
 			padding-left: 5px;
-			transition: opacity 1s ease-in-out;
-   			-moz-transition: opacity 1s ease-in-out;
-   			-webkit-transition: opacity 1s ease-in-out;
+			transition: opacity 0.5s ease-in-out;
+   			-moz-transition: opacity 0.5s ease-in-out;
+   			-webkit-transition: opacity 0.5s ease-in-out;
 		}
-		.bytecount[data-countdown-animate^='true'] span+span {
+		.bytecount[data-countdown-animate^='start'] span+span {
 			opacity: 0;
 		}
-		.bug {
-			border: 1px solid #CCC;
-			padding: 10px;
+
+
+		.progress-bar {
+			overflow: hidden;
+			width: 100%;
+			height: 30px;
+			position: relative;
+			border: 2px solid #FF6A00;
+			background-color: #FFFFFF;
+			margin: 10px 0;
+			border-radius: 3px;
 		}
-		.bug h3 {
-			margin: 0;
+		.progress-bar-ruler {
+			width: 100%;
+			height: 1px;
+			position: absolute;
+			top: 49%;
+			left: 0;
+			overflow: hidden;
 		}
-		.bug p {
-			margin: 0;
+		.progress-bar-ruler-line {
+			border-top: 10px dotted #FFCC00;
+		}
+		.progress-bar-fill {
+			background-color: #FF6A00;
+			width: 100%;
+			height: 30px;
+			position: absolute;
+			left: -100%;
+		}
+
+
+		.guage {
+			margin: 10px 0;
+			width: 300px;
+			height: 150px;
+			overflow:hidden;
+			border-bottom: 2px solid #FF6A00;
+		}
+		.guage-dial {
+			height: 200%;
+			border: 2px solid #FF6A00;
+			border-radius: 50%;
+			position: relative;
+		}
+		.guage-ruler {
+			width: 80%;
+			height: 80%;
+			border: 1px dashed #FFCC00;
+			border-radius: 50%;
+			position: absolute;
+			top: 10%;
+			left: 10%;
+		}
+		.guage-pointer {
+			position: absolute;
+		    bottom: 55%;
+		    left: 0;
+		    height: 2%;
+		    width: 100%;
+		    overflow: hidden;
+		}
+		.guage-pin {
+		    width: 10px;
+		    height: 10px;
+		    position: absolute;
+		    bottom: 54%;
+		    left: 48.5%;
+		    border-radius: 50%;
+		    background-color: #FF6A00;
+		}
+		.guage-needle {
+		    width: 0;
+		    height: 0;
+		    border-top: .15em solid transparent;
+		    border-bottom: .15em solid transparent;
+		    border-right: 10em solid #FF6A00;
+		    -moz-border-radius: 50%;
+		    -webkit-border-radius: 50%;
+		    border-radius: 50%;
+		}
+
+
+		@media only screen and (min-width: 858px) {
+		    .examples {
+				display: flex;
+			}
+			.examples .example {
+				flex: 1;
+				padding-right: 40px;
+			}
+			.examples .example + .example {
+				border-left: 1px solid #CCC;
+				padding-left: 40px;
+
+				border-top: none;
+				margin: 0;
+			}
 		}
 	</style>
 </head>
 <body>
-	<header>
-		<h1>FinalCounterDown</h1>
-		<p>Light-weight, animated counter changes a number from old value to the new value with formatting, and easing options.</p>
 
-		<div class="bytecount" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
-			<span>0.00</span><span>B</span>
+	<main>
+
+		<div class="section description">
+			<h1>FinalCounterDowner</h1>
+			<p>It's the FinalCounterDowner, a Light-weight, animated counter featuring:</p>
+			<ul>
+				<li>animated numerical counter</li>
+				<li>extendable formatting options</li>
+				<li>extendable graphical display options</li>
+				<li>easing option</li>
+			</ul>
 		</div>
 
-		<div class="bug">
-			<h3>Bugs</h3>
-			<p>Fixed Everything. Just trying to make it more performant and add features while keeping it light.</p>
+		<div class="section ui">
+			<h2>Examples</h2>
+			<div class="examples" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
+
+				<div class="example">
+					<h3>Display Numerical</h3>
+					<p>Numerical example that may use formatting of any type</p>
+					<div class="bytecount" data-countdown-digital="true"><span>0</span></div>
+				</div>
+
+				<div class="example">
+					<h3>Display Bar Graph</h3>
+					<p>bar graph example working with percentage formatting</p>
+					<div class="progress-bar">
+						<div class="progress-bar-ruler"></div>
+						<div class="progress-bar-fill" data-countdown-bar="true"></div>
+					</div>
+				</div>
+
+				<div class="example">
+					<h3>Display Guage Graph</h3>
+					<p>A guage graph example working with percentage formatting</p>
+					<div class="guage">
+						<div class="guage-dial">
+							<div class="guage-ruler"></div>
+							<div class="guage-pointer" data-countdown-guage="true">
+								<div class="guage-needle"></div>
+							</div>
+							<div class="guage-pin"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
 		</div>
-	</header>
+
+		<div class="section bug">
+			<h2>Todos / Bugs</h2>
+			<p>Separate css, js, html files</p>
+		</div>
+	</main>
 
 <script>
 	/*
-		Counter with formatting options
+		It's the FinalCounterDown!
+		Animated Counter with formatting options
 		By Terrill Couther
 	*/
 
 	var CountDown = function(options) {
-		this.el = options.element || null;
+		this.elements = options.elements;
+		this.el = this.elements.counter;
 		let elCurrentValue = this.el.getAttribute('data-current-number');
 		let elNewValue = this.el.getAttribute('data-new-number');
 
@@ -76,23 +248,36 @@
 		this.decimals = options.decimal || 2;
 		this.events = {};
 		this.displayTarget = '';
+		this.min = options.min || null;
+		this.max = options.max || null;
 
 		this.setEvents();
 	};
 
+	CountDown.prototype.set = function(options) {
+		this.curNum = options.curNum || this.curNum;
+		this.newNum = options.newNum || this.newNum;
+		this.easing = options.easing || this.easing;
+		this.format = options.format || this.format;
+		this.runtime = options.runtime || this.runtime;
+		this.idelay = options.idelay || this.idelay;
+		this.decimals = options.decimal || this.decimals;
+		this.min = options.min || this.min || 0;
+		this.max = options.max || this.max || 0;
+	};
 	CountDown.prototype.init = function() {
 		this.el.dispatchEvent(this.events.eventCountdownInit);
 
 		if ( this.el && this.el.getAttribute('data-countdown-init') ) {
-			let countIt = function(){
-				this.countStart({'newNum' : this.newNum});
+			let runCount = function(){
+				this.countTo({'newNum' : this.newNum});
 			}.bind(this);
 
 			let idelay = this.idelay;
 			if ( idelay ) {
-				window.setTimeout(countIt,idelay);
+				window.setTimeout(runCount,idelay);
 			} else {
-				countIt();
+				runCount();
 			}
 		}
 	};
@@ -104,26 +289,32 @@
 		this.events.eventCountdownChange = new Event('eventCountdownChange');
 
 		this.el.addEventListener('eventCountdownStart', function(evt) {
-			this.el.setAttribute('data-countdown-animate',true);
+			this.el.setAttribute('data-countdown-animate','start');
 		}.bind(this), false);
 		this.el.addEventListener('eventCountdownStop', function(evt) {
-			this.el.setAttribute('data-countdown-animate',false);
+			this.el.setAttribute('data-countdown-animate','stop');
 		}.bind(this), false);
 	};
 	CountDown.prototype.numDiff = function(num1, num2){
 		return (num1 > num2) ? num1-num2 : num2-num1;
 	};
-	CountDown.prototype.displayNumber = function(num) {
+	CountDown.prototype.changeNumber = function(num) {
 		let value = num || this.cntNum;
 		let frmat = this.format || null;
 		let decimals = this.decimals;
 		let displayed = (frmat) ? this.formatNum[frmat](value,decimals) : value;
-		if (this.el) {
-			this.el.innerHTML = displayed;
-			//trigger change
-			this.el.dispatchEvent(this.events.eventCountdownChange);
-		}
+		this.displayDigital(displayed);
+		this.displayGraph(value,displayed);
+		this.el.dispatchEvent(this.events.eventCountdownChange);
 		return displayed;
+	};
+	CountDown.prototype.displayDigital = function(num) {
+		if (this.elements.digital) this.elements.digital.innerHTML = num;
+	};
+	CountDown.prototype.displayGraph = function(value,formatted) {
+		if ( this.graphingFunction ) {
+			this.graphingFunction(value,formatted);
+		}
 	};
 	CountDown.prototype.easeOutX = function(t, b, c, d) {
 		return c * (-Math.pow(2, -10 * t / d) + 1) * 1024 / 1023 + b;
@@ -137,12 +328,9 @@
 
 			if ( this.easing ) {
 				if (this.dirNum == -1) {
-
-					console.log(this.easeOutX(timeElampsed, 0, diffCurNew, this.duration))
 					this.cntNum = this.curNum - this.easeOutX(timeElampsed, 0, diffCurNew, this.duration);
 
 				} else {
-					console.log(this.easeOutX(timeElampsed, this.curNum, diffCurNew, this.duration));
 					this.cntNum = this.easeOutX(timeElampsed, this.curNum, diffCurNew, this.duration);
 				}
 			} else {
@@ -161,7 +349,7 @@
 			}
 
 			//display Number
-			display = this.displayNumber();
+			display = this.changeNumber();
 
 			// whether to stop
 			if (timeElampsed >= this.duration) {
@@ -182,14 +370,25 @@
 		if ( this.el ) {
 			this.el.setAttribute('data-current-number',this.newNum);
 			this.el.setAttribute('data-new-number',this.newNum);
-			if ( display ) this.displayNumber();
+			if ( display ) this.changeNumber();
 		}
 
 		//trigger stop
 		this.el.dispatchEvent(this.events.eventCountdownStop);
 	};
 	CountDown.prototype.countStart = function(options) {
-		this.newNum = options.newNum || this.newNum || 0;
+		//Prep the count formatting
+		if ( this.format.match('percentage_') ) {
+			if (this.min || this.max) {
+				this.majority = this.numDiff(this.min,this.max);
+				this.newNum = ((this.newNum / this.majority) * 100);
+				this.dirNum = (this.curNum < this.newNum) ? 1 : -1;
+			} else {
+				console.log('percentage requires min and max values');
+				this.format = 'decimal_default';
+			}
+		}
+
 		this.dirNum = (this.curNum < this.newNum) ? 1 : -1;
 		this.stop = null;
 		this.stopped = null;
@@ -198,37 +397,78 @@
 		this.duration = Number(this.runtime) * 1000 || 2000;
 		this.startTime = this.timestamp = Date.now();
 		this.el.dispatchEvent(this.events.eventCountdownStart);
-		//start animation
+
+		//Start the count animation
 		this.countAnimate();
 	};
+	CountDown.prototype.countTo = function(options) {
+		if ( options ) this.set(options);
+		this.countStart();
+	};
 	CountDown.prototype.formatNum = {
-		'decimals' : function(a,b) {
-			return parseFloat(a.toFixed(b))
+		'decimal_default' : function(a,b) {
+			return parseFloat(a).toFixed(b);
 		},
-		'bytes1024Txt' : function(a,b) {if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		'percentage_html' : function(a,b) {
+			return "<span>" + parseFloat(a).toFixed(b) + "</span><span aria-label=\"percent\">%</span>";
 		},
-		'bytes1024Html' : function(a,b) {
+		'byte_1024Txt' : function(a,b) {if(0==a)return"0 Bytes";var c=1024,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));
+			f = ( f < 1 ) ? 0 : f;
+			return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		},
+		'byte_1024Html' : function(a,b) {
 			if(0==a)return"0 Bytes";
-			var c=1024, d=b||2,f=Math.floor(Math.log(a)/Math.log(c)),
-			e=[["B","Bytes"],["KB","Kilobytes"],["MB","Megabytes"],["GB","Gigabytes"],["TB","Terabytes"],["PB","Petabytes"],["EB","Exabytes"],["ZB","Zettabytes"],["YB","Yottabytes"]];
+			var c=1024, d=b||2, f=Math.floor(Math.log(a)/Math.log(c)), e=[["B","Bytes"],["KB","Kilobytes"],["MB","Megabytes"],["GB","Gigabytes"],["TB","Terabytes"],["PB","Petabytes"],["EB","Exabytes"],["ZB","Zettabytes"],["YB","Yottabytes"]];
+			f = ( f < 1 ) ? 0 : f;
 			return "<span>"+parseFloat((a/Math.pow(c,f)).toFixed(d))+"</span><span aria-label=\""+e[f][1]+"\">"+e[f][0]+"</span>";
 		},
-		'bytes1000' : function(a,b) {if(0==a)return"0 Bytes";var c=1000,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		'byte_1000' : function(a,b) {if(0==a)return"0 Bytes";var c=1000,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));
+			f = ( f < 1 ) ? 0 : f;
+			return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
 		}
 	};
 
-	//USAGE
+	//USAGE : Set everything you need to animate
 	var count1 = new CountDown({
-		'element': document.querySelector("[data-countdown-init]"),
-		'format' : 'bytes1024Html',
-		'runtime' : 2, //animation framecount
+		'elements': {
+			'counter' : document.querySelector("[data-countdown-init]"),
+			'digital' : document.querySelector("[data-countdown-digital]"), //optional
+			'bar' : document.querySelector("[data-countdown-bar]"), //optinal
+			'guage' : document.querySelector("[data-countdown-guage]") //optinal
+		},
+		'format' : 'percentage_html',
+		'newNum' : 3000,
+		'min' : 0,
+		'max' : 10000,
+		'runtime' : 1, //animation framecount
 		'easing': true, //rate of slowdown to divide speed
-		'idelay' : 2000, //initial animation delay
-		'decimal': 2 //decimal count
+		'idelay' : 1000, //initial animation delay
+		'decimal': 6 //decimal count
 	});
 	count1.init();
 
-	//set random listeners
+
+
+	//USAGE Advanced : Use graphingFunction to animate your graphs
+	count1.graphingFunction = function(num,numFormatted) {
+		this.displayGraphGuage(num);
+		this.displayGraphBar(num);
+	}
+
+	count1.displayGraphBar = function(num) {
+		if ( this.elements.bar ) {
+			this.elements.bar.style.transform = "translateX("+num+"%)";
+		}
+	}
+	count1.displayGraphGuage = function(num) {
+		if ( this.elements.guage ) {
+			let val = (num/100 * 180);
+			this.elements.guage.style.transform = "rotate("+val+"deg)";
+		}
+	}
+
+
+	//USAGE : set random listeners
 	count1.el.addEventListener('eventCountdownStop', function(evt) {
 		console.log('stopped');
 	}, false);
@@ -239,7 +479,20 @@
 
 	//SINGLE VALUE COUNT
 	//count1.countStart({'newNum' : 9869876987765});
+
+	//PERCENTAGE COUNT
+	//count1.countTo({'newNum' : 550, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
+	//count1.countTo({'newNum' : 3000.5, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 </script>
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
