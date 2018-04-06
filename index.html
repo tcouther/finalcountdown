@@ -61,16 +61,17 @@
 
 
 
-		.formy {
-			margin: 20px 0;
-			padding: 15px 15px;
-
-			border: 1px solid #CCC;
-			border-top: none;
+		.content-form {
+			overflow: hidden;
+			margin: 30px 0 20px;
+		}
+		.formy input, .formy button {
+			padding: 10px;
+			font-size: 16px;
 		}
 		.formy > .row {
 			padding: 20px;
-			background-color: #F9F9F9;
+			background-color: #f6f9ff;
 		}
 		.formy > .row+.row {
 			border-top: 1px solid #EEE;
@@ -250,7 +251,6 @@
 			<div class="content">
 
 				<div class="examples" data-countdown-init="true" data-current-number="1" data-new-number="9000000000">
-
 					<div class="example">
 						<h3>Display Numerical</h3>
 						<p>Numerical example that may use formatting of any type</p>
@@ -285,21 +285,22 @@
 							</div>
 						</div>
 					</div>
-
 				</div>
 
-				<form class="formy" id="formy">
-					<div class="formtop"></div>
-					<div class="row">
-						<input type="number" size="5" value="30000" id="maxval" /> Max
-					</div>
-					<div class="row">
-						<input type="number" size="5" value="10000" id="newval" /> New
-					</div>
-					<div class="row">
-						<button>Update Counter Values</button>
-					</div>
-				</form>
+				<div class="content-form">
+					<form class="formy" id="formy">
+						<div class="formtop"></div>
+						<div class="row">
+							<input type="number" size="5" value="30000" id="maxval" /> Max
+						</div>
+						<div class="row">
+							<input type="number" size="5" value="10000" id="newval" /> New
+						</div>
+						<div class="row">
+							<button>Update Counter Values</button>
+						</div>
+					</form>
+				</div>
 
 			</div>
 		</div>
@@ -535,7 +536,7 @@
 		'max' : 30000,
 		'runtime' : 1, //animation framecount
 		'easing': true, //rate of slowdown to divide speed
-		'idelay' : 1000, //initial animation delay
+		'idelay' : 500, //initial animation delay
 		'decimal': 4 //decimal count
 	});
 	count1.init();
