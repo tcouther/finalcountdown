@@ -65,9 +65,48 @@
 			overflow: hidden;
 			margin: 30px 0 20px;
 		}
-		.formy input, .formy button {
-			padding: 10px;
-			font-size: 16px;
+		.formy input, .formy select, .formy button {
+			padding: 10px 15px;
+		    font-size: 16px;
+		    box-sizing: border-box;
+		    -webkit-appearance: none;
+		    -moz-appearance: none;
+		    border: 1px solid #DDD;
+		    color: #555;
+		    width: 200px;
+		}
+		.formy button {
+			background-color: #FF6A00;
+			color: #FFF;
+			font-weight: 200;
+		}
+
+		.formy select, .formy button {
+			cursor: pointer;
+		}
+		.formy .select-box select {
+			padding-right: 58px;
+			background-color: #FFF;
+		}
+		.formy .select-box {
+			position: relative;
+			display: inline-block;
+		}
+		.formy .select-box:after {
+		    position: absolute;
+		    right: .9em;
+		    bottom: .9em;
+		    content: '';
+		    display: block;
+
+		    width: 0;
+			height: 0;
+			border-left: 5px solid transparent;
+			border-right: 5px solid transparent;
+		  	border-top: 7px solid #777;
+		}
+		.formy .disable-form {
+			color: #CCC;
 		}
 		.formy > .row {
 			padding: 20px;
@@ -116,7 +155,6 @@
 
 		.progress-bar {
 			overflow: hidden;
-			width: 100%;
 			height: 30px;
 			position: relative;
 			border: 2px solid #FF6A00;
@@ -291,13 +329,20 @@
 					<form class="formy" id="formy">
 						<div class="formtop"></div>
 						<div class="row">
+							<div class="select-box">
+								<select id="formatnum">
+									<option value="percentage_html">percentage_html</option>
+								</select>
+							</div> Format
+						</div>
+						<div class="row">
 							<input type="number" size="5" value="30000" id="maxval" /> Max
 						</div>
 						<div class="row">
 							<input type="number" size="5" value="10000" id="newval" /> New
 						</div>
 						<div class="row">
-							<button>Update Counter Values</button>
+							<button>Update Counter</button>
 						</div>
 					</form>
 				</div>
@@ -500,9 +545,6 @@
 		this.countStart();
 	};
 	CountDown.prototype.formatNum = {
-		'decimal_default' : function(a,b) {
-			return parseFloat(a).toFixed(b);
-		},
 		'percentage_html' : function(a,b) {
 			return "<span>" + parseFloat(a).toFixed(b) + "</span><span aria-label=\"percent\">%</span>";
 		},
@@ -519,6 +561,9 @@
 		'byte_1000' : function(a,b) {if(0==a)return"0 Bytes";var c=1000,d=b||2,e=["Bytes","KB","MB","GB","TB","PB","EB","ZB","YB"],f=Math.floor(Math.log(a)/Math.log(c));
 			f = ( f < 1 ) ? 0 : f;
 			return parseFloat((a/Math.pow(c,f)).toFixed(d))+" "+e[f]
+		},
+		'decimal_default' : function(a,b) {
+			return parseFloat(a).toFixed(b);
 		}
 	};
 
@@ -534,9 +579,9 @@
 		'newNum' : 10000,
 		'min' : 0,
 		'max' : 30000,
-		'runtime' : 1, //animation framecount
+		'runtime' : 3, //animation framecount
 		'easing': true, //rate of slowdown to divide speed
-		'idelay' : 500, //initial animation delay
+		'idelay' : 200, //initial animation delay
 		'decimal': 4 //decimal count
 	});
 	count1.init();
@@ -561,7 +606,6 @@
 		}
 	}
 
-
 	//USAGE : set random listeners
 	count1.el.addEventListener('eventCountdownStop', function(evt) {
 		console.log('stopped');
@@ -577,25 +621,78 @@
 	//PERCENTAGE COUNT
 	//count1.countTo({'newNum' : 550, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
 	//count1.countTo({'newNum' : 3000.5, 'min' : 0, 'max' : 30000, 'format':'percentage_html'})
+
+
+
+
 </script>
 
 <script>
-	function changeVal(event) {
-		event.preventDefault();
+	(function(){
+		let formcoEl = document.getElementById('formy')
+		let formatEl = document.getElementById('formatnum');
+		let newnumEl = document.getElementById('newval');
+		let maxnumEl = document.getElementById('maxval');
 
-		let newnum = parseInt(document.getElementById('newval').value);
-		let maxnum = parseInt(document.getElementById('maxval').value);
+		function setFormatForm(element) {
+			let el = element;
 
-		count1.countTo({
-			'newNum' : newnum,
-			'min' : 0,
-			'max' : maxnum,
-			'format':'percentage_html'
-		});
-	}
-	document.getElementById('formy').onsubmit = function(event) {
-		changeVal(event);
-	}
+			function getFormats() {
+				let formats = count1.formatNum;
+				let output = [];
+				for (x in formats) {
+					output.push(x);
+				}
+				return output;
+			};
+			function delOptions() {
+				let tags = el.getElementsByTagName('option');
+				let arry = Array.prototype.slice.call(tags);
+				for ( var i=0; i < arry.length; i++ ) {
+					el.removeChild(arry[i]);
+				}
+			}
+			function addOptions(item,index) {
+				let newOpt = document.createElement('option');
+				newOpt.innerHTML = newOpt.value = item;
+				el.appendChild(newOpt);
+			}
+
+			delOptions();
+
+			let frmts = getFormats();
+			frmts.map(addOptions);
+		}
+
+		function changeVal(event) {
+			event.preventDefault();
+			let format = formatEl.options[formatEl.selectedIndex].value;
+			let newnum = parseInt(newnumEl.value);
+			let maxnum = parseInt(maxnumEl.value);
+
+			count1.countTo({
+				'newNum' : newnum,
+				'min' : 0,
+				'max' : maxnum,
+				'format': format
+			});
+		}
+
+		formatEl.onchange = function(event) {
+			let val = this.options[this.selectedIndex].value;
+			if ( val.match('percentage_') ) {
+				maxnumEl.className = '';
+			} else {
+				maxnumEl.className = 'disable-form';
+			}
+		}
+
+		formcoEl.onsubmit = function(event) {
+			changeVal(event);
+		}
+
+		setFormatForm(formatEl);
+	})();
 </script>
 
 
