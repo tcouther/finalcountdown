@@ -1,8 +1,9 @@
 # finalcountdown
-It‘s the FinalCountDown, a Light-weight, css & animated counter, featuring:
-Feel Free to Add features and UI examples.
+It‘s the FinalCountDown, a Light-weight, css & js animated counter, featuring:
+Feel Free to optimize, Add features, and UI examples. 
+
+Note: I would like to add easing options.
 
 * animated numerical counter
-* extendable formatting options
-* extendable graphical display options
+* extendable formatting & graphical display options
 * easing
