@@ -1,5 +1,6 @@
 # finalcountdown
-It's the FinalCounterDowner, a Light-weight, animated counter featuring:
+It‘s the FinalCountDown, a Light-weight, css & animated counter, featuring:
+Feel Free to Add features and UI examples.
 
 * animated numerical counter
 * extendable formatting options
